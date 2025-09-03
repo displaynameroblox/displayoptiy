@@ -9,9 +9,9 @@ end
 
 -- Load modules
 local PlaybackManager = requireFromUrl("PlaybackManager.lua")
---local UIManager = requireFromUrl("UIManager.lua")
---local PlaylistManager = requireFromUrl("PlaylistManager.lua")
---local ThemeManager = requireFromUrl("ThemeManager.lua")
+local UIManager = requireFromUrl("UIManager.lua")
+local PlaylistManager = requireFromUrl("PlaylistManager.lua")
+local ThemeManager = requireFromUrl("ThemeManager.lua")
 
 -- Initialize system
 local MusicPlayer = {}
