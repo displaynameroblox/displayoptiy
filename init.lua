@@ -21,23 +21,20 @@ local function requireFromUrl(file)
 end
 
 -- Load modules
-local PlaybackManager = requireFromUrl("PlaybackManager.lua")
-local UIManager = requireFromUrl("UIManager.lua")
-local PlaylistManager = requireFromUrl("PlaylistManager.lua")
-local ThemeManager = requireFromUrl("ThemeManager.lua")
+local Util = require(root.Util)
+local Storage = require(root.Storage)
+local ThemeManager = require(root.ThemeManager)
+local PlaylistManager = require(root.PlaylistManager)
+local UIManager = require(root.UIManager)
+local PlaybackManager = require(root.PlaybackManager)
+local Main = require(root.Main) -- this auto-runs
 
--- Initialize system
-local MusicPlayer = {}
-MusicPlayer.Playback = PlaybackManager
-MusicPlayer.UI = UIManager
-MusicPlayer.Playlist = PlaylistManager
-MusicPlayer.Theme = ThemeManager
-
--- Boot UI (only if UIManager loaded successfully)
-if MusicPlayer.UI and MusicPlayer.UI.init then
-    MusicPlayer.UI.init(MusicPlayer)
-else
-    warn("UIManager failed to load or 'init' missing")
-end
-
-return MusicPlayer
+return {
+    Util = Util,
+    Storage = Storage,
+    ThemeManager = ThemeManager,
+    PlaylistManager = PlaylistManager,
+    UIManager = UIManager,
+    PlaybackManager = PlaybackManager,
+    Main = Main
+}
