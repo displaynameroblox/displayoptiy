@@ -1,6 +1,6 @@
 # 🎵 Displayoptiy Player
 
-A lightweight Roblox music player made for me and my friends. Runs fully client-side with playlists, themes, and playback controls.
+A lightweight Roblox music player. Runs fully client-side with playlists, themes, and playback controls.
 
 ---
 
@@ -33,7 +33,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 ---
 
 ## ⚠️ Disclaimer
-This project is made for personal use with friends. No guarantees of stability or updates. Use at your own risk.
+This project is stii indev . No guarantees of stability or updates. Use at your own risk.
 
 ---
 
