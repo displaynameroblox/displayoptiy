@@ -1,65 +1,37 @@
---[[
-Displayoptiy / ThemeManager.lua
-Handles themes and styling for the UI.
-Provides defaults and allows switching.
-]]
+-- ThemeManager.lua
+return function(deps)
+    local Util = deps.Util
+    local Storage = deps.Storage
 
-local Util = require(script.Parent.Util)
-
-local ThemeManager = {}
-
--- Default themes
-ThemeManager.Themes = {
-    Dark = {
-        Background = Color3.fromRGB(20, 20, 20),
-        Foreground = Color3.fromRGB(240, 240, 240),
-        Accent = Color3.fromRGB(0, 170, 255),
-        Secondary = Color3.fromRGB(60, 60, 60),
-    },
-    Light = {
-        Background = Color3.fromRGB(245, 245, 245),
-        Foreground = Color3.fromRGB(30, 30, 30),
-        Accent = Color3.fromRGB(0, 120, 215),
-        Secondary = Color3.fromRGB(220, 220, 220),
-    },
-    Neon = {
-        Background = Color3.fromRGB(10, 10, 20),
-        Foreground = Color3.fromRGB(255, 255, 255),
-        Accent = Color3.fromRGB(255, 0, 200),
-        Secondary = Color3.fromRGB(30, 30, 60),
+    local ThemeManager = {
+        themes = {
+            Dark = { bg = Color3.fromRGB(30, 30, 30), text = Color3.fromRGB(255, 255, 255) },
+            Light = { bg = Color3.fromRGB(245, 245, 245), text = Color3.fromRGB(0, 0, 0) },
+            Neon = { bg = Color3.fromRGB(0, 255, 150), text = Color3.fromRGB(0, 0, 0) }
+        },
+        current = "Dark"
     }
-}
 
--- Current theme
-ThemeManager.Current = Util.deepClone(ThemeManager.Themes.Dark)
-ThemeManager.Name = "Dark"
+    local Signal = Instance.new("BindableEvent")
+    ThemeManager.OnThemeChanged = Signal.Event
 
--- Signal for theme changes
-ThemeManager.OnThemeChanged = Util.Signal.new()
-
---//////////// API ////////////--
-function ThemeManager.setTheme(name)
-    local theme = ThemeManager.Themes[name]
-    if theme then
-        ThemeManager.Current = Util.deepClone(theme)
-        ThemeManager.Name = name
-        ThemeManager.OnThemeChanged:Fire(theme)
+    function ThemeManager.setTheme(name)
+        if ThemeManager.themes[name] then
+            ThemeManager.current = name
+            Storage.save("theme", name)
+            Signal:Fire(ThemeManager.themes[name])
+        end
     end
-end
 
-function ThemeManager.getTheme()
-    return ThemeManager.Current
-end
+    function ThemeManager.getTheme()
+        return ThemeManager.themes[ThemeManager.current]
+    end
 
-function ThemeManager.listThemes()
-    local keys = {}
-    for k,_ in pairs(ThemeManager.Themes) do table.insert(keys, k) end
-    table.sort(keys)
-    return keys
-end
+    -- restore last theme if available
+    local saved = Storage.load("theme")
+    if saved and ThemeManager.themes[saved] then
+        ThemeManager.current = saved
+    end
 
-function ThemeManager.registerTheme(name, def)
-    ThemeManager.Themes[name] = Util.deepClone(def)
+    return ThemeManager
 end
-
-return ThemeManager
