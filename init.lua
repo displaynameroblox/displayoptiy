@@ -27,22 +27,17 @@ end
 
 -- import all modules
 local Util = import("Util")
-local Storage = import("Storage")
-local ThemeManager = import("ThemeManager")
-local PlaylistManager = import("PlaylistManager")
-local UIManager = import("UIManager")
-local PlaybackManager = import("PlaybackManager")
-local Main = import("Main") -- auto-inits
-
-print("✅ Displayoptiy loaded successfully from GitHub")
-
--- expose a single API
-return {
+local Storage = import("Storage")({ Util = Util })
+local ThemeManager = import("ThemeManager")({ Util = Util, Storage = Storage })
+local PlaylistManager = import("PlaylistManager")({ Util = Util, Storage = Storage })
+local UIManager = import("UIManager")({ Util = Util, ThemeManager = ThemeManager })
+local PlaybackManager = import("PlaybackManager")({ Util = Util, PlaylistManager = PlaylistManager })
+local Main = import("Main")({
     Util = Util,
     Storage = Storage,
     ThemeManager = ThemeManager,
     PlaylistManager = PlaylistManager,
     UIManager = UIManager,
-    PlaybackManager = PlaybackManager,
-    Main = Main,
-}
+    PlaybackManager = PlaybackManager
+})
+print("working!")
