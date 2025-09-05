@@ -27,7 +27,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 ---
 
 ## ⚠️ Disclaimer
-This project is stii indev . No guarantees of stability or updates. Use at your own risk.
+This project is still indev . No guarantees of stability or updates. Use at your own risk.
 
 ---
 
