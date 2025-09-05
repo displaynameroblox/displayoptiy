@@ -4,9 +4,10 @@ Handles saving/loading playlists and settings.
 Uses filesystem if executor supports it; otherwise falls back to in-memory store.
 ]]
 
-local Util = require(script.Parent.Util)
+return function(deps)
+    local Util = deps.Util
 
-local Storage = {}
+    local Storage = {}
 
 -- Configuration
 Storage.FOLDER = "Displayoptiy"
