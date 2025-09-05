@@ -23,12 +23,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 - Auto-saves playlists & settings (to file if supported, fallback to memory)
 - Minimal, responsive UI
 
----
-
-## 🛠️ Customization
-- Add more themes in `ThemeManager.lua`
-- Change default playlist seeding in `Main.lua`
-- Extend UI in `UIManager.lua`
 
 ---
 
