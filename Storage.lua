@@ -1,104 +1,64 @@
---[[
-Displayoptiy / Storage.lua
-Handles saving/loading playlists and settings.
-Uses filesystem if executor supports it; otherwise falls back to in-memory store.
-]]
+-- Storage.lua (dependency-injected)
 
 return function(deps)
     local Util = deps.Util
 
     local Storage = {}
+    local data = {} -- in-memory fallback
 
--- Configuration
-Storage.FOLDER = "Displayoptiy"
-Storage.PLAYLIST_FILE = "playlists.json"
-Storage.SETTINGS_FILE = "settings.json"
-
--- In-memory cache fallback
-local memoryCache = {
-    playlists = {},
-    settings = {}
-}
-
--- Ensure folder for FS mode
-if Util.hasFS() then
-    Util.ensureFolder(Storage.FOLDER)
-end
-
---//////////// Internal helpers ////////////--
-local function safeWrite(path, data)
-    if not Util.hasFS() then return false end
-    local ok, err = pcall(function()
-        writefile(path, data)
-    end)
-    return ok
-end
-
-local function safeRead(path)
-    if not Util.hasFS() then return nil end
-    local ok, content = pcall(function()
-        return readfile(path)
-    end)
-    if ok then return content end
-    return nil
-end
-
---//////////// Playlists ////////////--
-function Storage.savePlaylists(tbl)
-    if Util.hasFS() then
-        local json = Util.jsonEncode(tbl)
-        safeWrite(Storage.FOLDER .. "/" .. Storage.PLAYLIST_FILE, json)
-    else
-        memoryCache.playlists = Util.deepClone(tbl)
-    end
-end
-
-function Storage.loadPlaylists()
-    if Util.hasFS() then
-        local content = safeRead(Storage.FOLDER .. "/" .. Storage.PLAYLIST_FILE)
-        if content then
-            local data = Util.jsonDecode(content)
-            if data then return data end
+    -- helper to safely load from file if exploit API exists
+    local function loadFromFile(name)
+        if isfile and isfile(name) then
+            local ok, decoded = pcall(function()
+                return game:GetService("HttpService"):JSONDecode(readfile(name))
+            end)
+            if ok and decoded then
+                return decoded
+            end
         end
-        return {}
-    else
-        return Util.deepClone(memoryCache.playlists)
+        return nil
     end
-end
 
---//////////// Settings ////////////--
-function Storage.saveSettings(tbl)
-    if Util.hasFS() then
-        local json = Util.jsonEncode(tbl)
-        safeWrite(Storage.FOLDER .. "/" .. Storage.SETTINGS_FILE, json)
-    else
-        memoryCache.settings = Util.deepClone(tbl)
-    end
-end
-
-function Storage.loadSettings()
-    if Util.hasFS() then
-        local content = safeRead(Storage.FOLDER .. "/" .. Storage.SETTINGS_FILE)
-        if content then
-            local data = Util.jsonDecode(content)
-            if data then return data end
+    local function saveToFile(name, tbl)
+        if writefile then
+            local ok, encoded = pcall(function()
+                return game:GetService("HttpService"):JSONEncode(tbl)
+            end)
+            if ok then
+                writefile(name, encoded)
+            end
         end
-        return {}
-    else
-        return Util.deepClone(memoryCache.settings)
     end
-end
 
---//////////// Clear ////////////--
-function Storage.clearAll()
-    if Util.hasFS() then
-        pcall(function()
-            delfile(Storage.FOLDER .. "/" .. Storage.PLAYLIST_FILE)
-            delfile(Storage.FOLDER .. "/" .. Storage.SETTINGS_FILE)
-        end)
+    -- public API
+    function Storage.save(key, value)
+        data[key] = value
+        saveToFile(key .. ".json", value)
     end
-    memoryCache.playlists = {}
-    memoryCache.settings = {}
-end
 
-return Storage
+    function Storage.load(key)
+        if data[key] then
+            return data[key]
+        end
+        local fromFile = loadFromFile(key .. ".json")
+        if fromFile then
+            data[key] = fromFile
+            return fromFile
+        end
+        return nil
+    end
+
+    function Storage.delete(key)
+        data[key] = nil
+        if delfile then
+            local ok = pcall(function()
+                delfile(key .. ".json")
+            end)
+            if not ok then
+                warn("Could not delete file for " .. key)
+            end
+        end
+    end
+
+    return Storage
+end
