@@ -1,4 +1,7 @@
-# THIS IS NOT WORKING RIGHT NOW
+# THIS IS NOT WORKING RIGHT NOW, 
+
+i'm working for a fix, thanks for the wait <3
+
 ---
 
 # 🎵 Displayoptiy Player
