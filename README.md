@@ -1,6 +1,13 @@
-# THIS IS NOT WORKING RIGHT NOW, 
+#Update!
 
-i'm working for a fix, thanks for the wait <3
+v0.8:
+Fixed gui not loading in
+
+Added new themes 
+
+---
+ 
+More coming soon :3
 
 ---
 
