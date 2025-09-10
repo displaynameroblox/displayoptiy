@@ -1,9 +1,21 @@
 # Update!
 
-v0.8:
+# v0.8:
 Fixed gui not loading in
 
 Added new themes 
+
+# V0.9
+
+Now you can see any song in any game
+
+Now it's saves your playlists, and songs,
+
+Added a new search tap
+
+Added a new setting (unload)
+
+Added a home tap
 
 ---
  
