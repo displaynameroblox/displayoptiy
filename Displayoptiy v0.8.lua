@@ -136,7 +136,7 @@ function Spotify:createUI()
 	logo.Size = UDim2.fromScale(1, 1)
 	logo.BackgroundTransparency = 1
 	logo.Font = Enum.Font.GothamBlack
-	logo.Text = "🎵 Next Spotify"
+	logo.Text = "Displayoptiy"
 	logo.TextScaled = true
 	logo.TextXAlignment = Enum.TextXAlignment.Center
 	
