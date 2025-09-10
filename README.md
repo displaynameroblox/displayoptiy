@@ -22,7 +22,7 @@ A lightweight Roblox music player. Runs fully client-side with playlists, themes
 Paste this into your executor:
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/displayoptiy/refs/heads/main/init.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/displayoptiy/refs/heads/main/Displayoptiy%20v0.8.lua"))()
 ```
 
 ---
