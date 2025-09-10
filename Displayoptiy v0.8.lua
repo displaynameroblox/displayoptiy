@@ -1,11 +1,6 @@
--- Next Spotify - Full LocalScript (IMPROVED & MOBILE-FRIENDLY)
--- Place in StarterPlayerScripts (LocalScript)
-
--- Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local SoundService = game:GetService("SoundService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local Workspace = game:GetService("Workspace")
@@ -30,10 +25,6 @@ function Spotify.new()
 	
 	-- State
 	self.player = Players.LocalPlayer
-	self.remoteFolder = ReplicatedStorage:WaitForChild("SpotifyRemotes")
-	self.loadDataFunction = self.remoteFolder:WaitForChild("LoadData")
-	self.saveDataEvent = self.remoteFolder:WaitForChild("SaveData")
-	
 	self.playlists = {}
 	self.settings = { theme = "Dark", toggleKey = Enum.KeyCode.M }
 	self.selectedPlaylistName = nil
@@ -41,8 +32,8 @@ function Spotify.new()
 	self.currentPlaylistName = nil
 	self.currentIndex = 0
 	self.connections = {}
-	self.saveThread = nil
 	self.ui = {}
+    self.isExecutor = true
 
 	return self
 end
@@ -65,20 +56,37 @@ function Spotify:normalizeSoundId(id)
 	return n and "rbxassetid://" .. n or s
 end
 
-function Spotify:requestSave()
-	if self.saveThread then
-		task.cancel(self.saveThread)
-	end
-	self.saveThread = task.delay(1.5, function()
-		local dataToSave = {
-			playlists = self.playlists,
-			settings = {
-				theme = self.settings.theme,
-				toggleKeyString = self.settings.toggleKey.Name
-			}
-		}
-		self.saveDataEvent:FireServer(dataToSave)
-	end)
+-- This function is now a local save/load
+function Spotify:saveData()
+    if not self.isExecutor then return end -- Only for executor
+    local success, err = pcall(function()
+        local dataToSave = {
+            playlists = self.playlists,
+            settings = {
+                theme = self.settings.theme,
+                toggleKeyString = self.settings.toggleKey.Name
+            }
+        }
+        writefile("NextSpotify.json", game:GetService("HttpService"):JSONEncode(dataToSave))
+    end)
+    if not success then
+        warn("Failed to save data to file:", err)
+    end
+end
+
+function Spotify:loadData()
+    if not self.isExecutor then return end -- Only for executor
+    local success, data = pcall(function()
+        if isfile("NextSpotify.json") then
+            return game:GetService("HttpService"):JSONDecode(readfile("NextSpotify.json"))
+        end
+    end)
+    if success and data and typeof(data) == "table" then
+        return data
+    else
+        warn("Failed to load data or data file not found:", data or err)
+        return nil
+    end
 end
 
 function Spotify:findFirstInstance(name, parent)
@@ -93,11 +101,12 @@ end
 --- UI Creation
 --------------------
 function Spotify:createUI()
-	-- Main GUI
-	self.ui.screenGui = Instance.new("ScreenGui", self.player.PlayerGui)
+	-- Main GUI in CoreGui
+	self.ui.screenGui = Instance.new("ScreenGui")
 	self.ui.screenGui.Name = "NextSpotifyGUI"
 	self.ui.screenGui.ResetOnSpawn = false
 	self.ui.screenGui.IgnoreGuiInset = true
+    self.ui.screenGui.Parent = game:GetService("CoreGui")
 	
 	-- Main Frame
 	self.ui.mainFrame = Instance.new("Frame")
@@ -199,7 +208,7 @@ function Spotify:createUI()
 	
 	local function makeTabButton(name)
 		local btn = Instance.new("TextButton")
-		btn.Size = UDim2.new(1/3, -12, 1, -12) -- Use scale for better distribution
+		btn.Size = UDim2.new(1/3, -12, 1, -12)
 		btn.Text = name
 		btn.Font = Enum.Font.GothamBlack
 		btn.TextScaled = true
@@ -323,7 +332,7 @@ end
 
 function Spotify:createPlaylistsPageUI()
 	local viewportSize = Workspace.CurrentCamera.ViewportSize
-	local isMobile = viewportSize.X < viewportSize.Y * 1.5 -- Simple check for mobile/portrait mode
+	local isMobile = viewportSize.X < viewportSize.Y * 1.5
 	
 	local playlistCols = Instance.new("UIListLayout", self.ui.playlistsPage)
 	playlistCols.FillDirection = isMobile and Enum.FillDirection.Vertical or Enum.FillDirection.Horizontal
@@ -453,7 +462,7 @@ function Spotify:createSettingsPageUI()
 		themeBtn.TextColor3 = themeData.text
 		self.connections[themeName .. "Btn"] = themeBtn.MouseButton1Click:Connect(function()
 			self:applyTheme(themeName)
-			self:requestSave()
+			self:saveData()
 		end)
 	end
 	
@@ -474,7 +483,7 @@ function Spotify:createSettingsPageUI()
 			if not gp and input.UserInputType == Enum.UserInputType.Keyboard then
 				self.settings.toggleKey = input.KeyCode
 				self.ui.kbRow.Text = "Current: " .. input.KeyCode.Name
-				self:requestSave()
+				self:saveData()
 				conn:Disconnect()
 			end
 		end)
@@ -564,7 +573,7 @@ function Spotify:playSong(song, playlistName, songIndex)
 	sound.Name = "NextSpotifySound"
 	sound.SoundId = soundId
 	sound.Volume = 1
-	sound.Parent = SoundService
+	sound.Parent = Workspace
 	
 	local ok, err = pcall(function()
 		sound:Play()
@@ -638,7 +647,10 @@ function Spotify:rebuildDropdownList()
 		btn.MouseButton1Click:Connect(function()
 			self.ui.plDropdown.Text = name
 			self.ui.dropPanel.Visible = false
-			self.connections.dropdownInput:Disconnect()
+			if self.connections.dropdownInput then
+                self.connections.dropdownInput:Disconnect()
+                self.connections.dropdownInput = nil
+            end
 		end)
 	end
 end
@@ -649,7 +661,7 @@ function Spotify:createPlaylist()
 		self.playlists[name] = { songs = {} }
 		self.ui.newPlBox.Text = ""
 		self:rebuildPlaylistList()
-		self:requestSave()
+		self:saveData()
 	end
 end
 
@@ -691,7 +703,7 @@ function Spotify:addSongToPlaylist()
 	self.ui.songIdBox.Text, self.ui.songTitleBox.Text, self.ui.decalBox.Text = "", "", ""
 	
 	self:refreshSongsGrid()
-	self:requestSave()
+	self:saveData()
 end
 
 function Spotify:refreshSongsGrid()
@@ -771,7 +783,7 @@ function Spotify:refreshSongsGrid()
 		rmB.MouseButton1Click:Connect(function()
 			table.remove(self.playlists[self.selectedPlaylistName].songs, i)
 			self:refreshSongsGrid()
-			self:requestSave()
+			self:saveData()
 		end)
 	end
 end
@@ -799,10 +811,6 @@ function Spotify:cleanup()
 		conn:Disconnect()
 	end
 	
-	if self.saveThread then
-		task.cancel(self.saveThread)
-	end
-	
 	if self.currentSound then
 		self.currentSound:Destroy()
 	end
@@ -820,7 +828,7 @@ function Spotify:init()
 	loadingOverlay.Name = "LoadingOverlay"
 	loadingOverlay.Size = UDim2.fromScale(1, 1)
 	loadingOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	loadingOverlay.Parent = self.player.PlayerGui
+	loadingOverlay.Parent = game:GetService("CoreGui")
 	
 	local blur = Instance.new("BlurEffect", Lighting)
 	blur.Size = 18
@@ -861,7 +869,7 @@ function Spotify:init()
 	self:setupGlobalConnections()
 	
 	setStatus("Fetching your data...")
-	local loadedData = self.loadDataFunction:InvokeServer()
+	local loadedData = self:loadData()
 	
 	if loadedData and typeof(loadedData) == "table" then
 		setStatus("Applying loaded data...")
