@@ -2,30 +2,6 @@
 
 sorry but im working on a fix. :3
 
-# Update!
-
-# v0.8:
-Fixed gui not loading in
-
-Added new themes 
-
-# V0.9
-
-Now you can see any song in any game
-
-Now it's saves your playlists, and songs,
-
-Added a new search tap
-
-Added a new setting (unload)
-
-Added a home tap
-
----
- 
-More coming soon :3
-
----
 
 # 🎵 Displayoptiy Player
 
@@ -59,5 +35,31 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 This project is still indev . No guarantees of stability or updates. Use at your own risk.
 
 ---
+
+# Update!
+
+# v0.8:
+Fixed gui not loading in
+
+Added new themes 
+
+# V0.9
+
+Now you can see any song in any game
+
+Now it's saves your playlists, and songs,
+
+Added a new search tap
+
+Added a new setting (unload)
+
+Added a home tap
+
+---
+ 
+More coming soon :3
+
+---
+
 
 Enjoy 🎶
