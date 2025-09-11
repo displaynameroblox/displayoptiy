@@ -1,8 +1,3 @@
--- Next Spotify - Executor Version
--- Made for use with Roblox Executors (e.g., Synapse, ProtoSmasher, KRNL)
--- This script should be placed in the Executor's script hub and executed.
-
--- Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
