@@ -1,8 +1,3 @@
-# THIS IS NOT WORKING YET AGAIN
-
-sorry but im working on a fix. :3
-
-
 # 🎵 Displayoptiy Player
 
 A lightweight Roblox music player. Runs fully client-side with playlists, themes, and playback controls.
@@ -32,16 +27,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 ---
 
 ## ⚠️ Disclaimer
-This project is still indev . No guarantees of stability or updates. Use at your own risk.
+This project is still indev. No guarantees of stability or updates. Use at your own risk.
 
 ---
 
-# Update!
+# Updates!
 
-# v0.8:
-Fixed gui not loading in
+# V0.9.1
 
-Added new themes 
+Fixed GUI not loading in!
 
 # V0.9
 
@@ -55,11 +49,10 @@ Added a new setting (unload)
 
 Added a home tap
 
----
- 
-More coming soon :3
 
----
+# v0.8:
+Fixed gui not loading in
 
+Added new themes 
 
 Enjoy 🎶
