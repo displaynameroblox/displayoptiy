@@ -1459,3 +1459,4 @@ end
 -- Main Execution
 local MySpotify = Spotify.new()
 MySpotify:init()
+print("working!")
