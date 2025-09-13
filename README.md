@@ -26,8 +26,24 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 
 ---
 
+## Don't want our users on your game?
+talk to us! we can help you to remove/block some songs on your game!
+
+```
+
+   aeee20221@outlook.com
+   
+```
+
+
+
 ## ⚠️ Disclaimer
 This project is still indev. No guarantees of stability or updates. Use at your own risk.
+
+this may be down sometimes sorry but as you may know this is still indev so im working on a a lot of bug fixes, if you find any plese dm me thanks!
+
+Discord: @feras_1256
+X.com: @itz_Displayname
 
 ---
 
