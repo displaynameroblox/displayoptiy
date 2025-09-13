@@ -41,6 +41,7 @@ This project is still indev. No guarantees of stability or updates. Use at your 
 this may be down sometimes sorry but as you may know this is still indev so im working on a a lot of bug fixes, if you find any plese dm me thanks!
 
 Discord: @feras_1256
+
 X.com: @itz_Displayname
 
 ---
