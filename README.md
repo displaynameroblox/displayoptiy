@@ -30,9 +30,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/displaynameroblox/dis
 talk to us! we can help you to remove/block some songs on your game!
 
 ```
-
-   aeee20221@outlook.com
-   
+aeee20221@outlook.com
 ```
 
 
