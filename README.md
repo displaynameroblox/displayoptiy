@@ -1,3 +1,7 @@
+# I'm working on a rewrite of displayoptiy
+
+this means you won't see any updates or any bug fixes, the new displayoptiy is coming soon
+
 # 🎵 Displayoptiy Player
 
 A lightweight Roblox music player. Runs fully client-side with playlists, themes, and playback controls.
