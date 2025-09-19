@@ -1,6 +1,8 @@
-# I'm working on a rewrite of displayoptiy
+# OUTDATED
 
-this means you won't see any updates or any bug fixes, the new displayoptiy is coming soon
+join the discord server to get new beta script!
+
+https://discord.gg/KvYNgyRekv
 
 # 🎵 Displayoptiy Player
 
