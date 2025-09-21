@@ -4,6 +4,8 @@ join the discord server to get new beta script!
 
 https://discord.gg/KvYNgyRekv
 
+
+
 # 🎵 Displayoptiy Player
 
 A lightweight Roblox music player. Runs fully client-side with playlists, themes, and playback controls.
@@ -42,14 +44,9 @@ aeee20221@outlook.com
 
 
 ## ⚠️ Disclaimer
-This project is still indev. No guarantees of stability or updates. Use at your own risk.
 
-this may be down sometimes sorry but as you may know this is still indev so im working on a a lot of bug fixes, if you find any plese dm me thanks!
-
-Discord: @feras_1256
-
-X.com: @itz_Displayname
-
+this porject is discontinued, this means no more bug fixes and update, go get the new beta script! [here!
+](https://discord.gg/KvYNgyRekv)
 ---
 
 # Updates!
